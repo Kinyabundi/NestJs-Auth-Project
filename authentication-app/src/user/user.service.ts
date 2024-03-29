@@ -45,7 +45,7 @@ export class UserService {
         .createQueryBuilder('user')
         .select([
           'user.id',
-          'user.fistName',
+          'user.firstName',
           'user.lastName',
           'user.email',
           'user.systemRole',
@@ -55,6 +55,7 @@ export class UserService {
 
       return users;
     } catch (err) {
+      console.log(err);
       throw new Error('An error was encountered while fetching users');
     }
   }
