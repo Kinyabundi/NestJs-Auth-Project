@@ -4,10 +4,6 @@ import { Public } from "./auth.set-metadata";
 import { LocalAuthGuard } from "./local-guard.auth";
 import {Request} from "express"
 
-export interface CustomRequest extends Request {
-	user: any; 
-   }
-
 
 @Controller('api/auth')
 export class AuthController {
@@ -18,7 +14,7 @@ export class AuthController {
     @Public()
 	@UseGuards(LocalAuthGuard)
 	@Post("login")
-	async login(@Req() req: CustomRequest) {
+	async login(@Req() req: any) {
 		return this.authService.login(req.user);
 	}
 }

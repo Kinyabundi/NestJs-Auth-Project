@@ -7,7 +7,7 @@ import { POSTGRES_DB, POSTGRES_HOST, POSTGRES_PASSWORD, POSTGRES_PORT, POSTGRES_
 const config = {
 	type: "postgres",
 	host: POSTGRES_HOST,
-	port: POSTGRES_PORT,
+	port: Number(POSTGRES_PORT),
 	username: POSTGRES_USER,
 	password: POSTGRES_PASSWORD,
 	database: POSTGRES_DB,
@@ -15,8 +15,8 @@ const config = {
 	migrations: [path.join(__dirname, "../../migrations/*{.ts,.js}")],
 	synchronize: false,
 	logging: false,
-};
+} satisfies DataSourceOptions;
 
 export default registerAs("typeorm", () => config);
 
-export const connectionSource = new DataSource(config as DataSourceOptions);
+export const connectionSource = new DataSource(config);
