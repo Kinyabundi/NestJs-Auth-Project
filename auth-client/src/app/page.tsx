@@ -1,12 +1,7 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
+import HomePage from './_components/HomePage';
 
 const page = () => {
-  return (
-    <div className="flex justify-center h-screen items-center">
-      <Button>Login</Button>
-    </div>
-  );
+  return <HomePage />;
 };
 
 export default page;
