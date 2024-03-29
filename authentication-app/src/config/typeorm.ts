@@ -3,6 +3,7 @@ import { registerAs } from "@nestjs/config";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { POSTGRES_DB, POSTGRES_HOST, POSTGRES_PASSWORD, POSTGRES_PORT, POSTGRES_USER } from "../env";
 
+
 const config = {
 	type: "postgres",
 	host: POSTGRES_HOST,

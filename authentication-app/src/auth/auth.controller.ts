@@ -1,9 +1,12 @@
 import { Controller, UseGuards, Post, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserService } from 'src/user/user.service';
 import { Public } from "./auth.set-metadata";
 import { LocalAuthGuard } from "./local-guard.auth";
-import {Request, Response} from "express"
+import {Request} from "express"
+
+export interface CustomRequest extends Request {
+	user: any; 
+   }
 
 
 @Controller('api/auth')
@@ -15,7 +18,7 @@ export class AuthController {
     @Public()
 	@UseGuards(LocalAuthGuard)
 	@Post("login")
-	async login(@Req() req: Request) {
+	async login(@Req() req: CustomRequest) {
 		return this.authService.login(req.user);
 	}
 }
