@@ -13,74 +13,78 @@ export class UserService {
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    try {
-      // confirm if user already exists with email using query builder
-      const query = this.userRepo
-        .createQueryBuilder('user')
-        .where('user.email = :email', { email: createUserDto.email })
-        .getOne();
+    // confirm if user already exists with email using query builder
+    const query = this.userRepo
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email: createUserDto.email })
+      .getOne();
 
-      const userExists = await query;
+    const userExists = await query;
 
-      if (userExists) {
-        throw new Error('User already exists');
-      }
-      // hash password
-      const hashedPassword = await argon2.hash(createUserDto.password);
-
-      const user = await this.createUser({
-        ...createUserDto,
-        password: hashedPassword,
-      });
-      return user;
-    } catch (err) {
-      throw new Error('An error was encountered while creating user');
+    if (userExists) {
+      throw new Error('User already exists');
     }
+    // hash password
+    const hashedPassword = await argon2.hash(createUserDto.password);
+
+    const user = new User();
+    user.firstName = createUserDto.firstName;
+    user.lastName = createUserDto.lastName;
+    user.email = createUserDto.email;
+    user.password = hashedPassword;
+    user.systemRole = createUserDto.systemRole || SystemRole.INTEGRATOR; 
+
+    const savedUser = await this.userRepo.save(user);
+    return savedUser;
   }
 
-  async getAllUsers():Promise<User[]>{
+  async getAllUsers(): Promise<User[]> {
     try {
-        // get users query builder but exclude password
-        const query = this.userRepo
-            .createQueryBuilder("user")
-            .select(["user.id", "user.fistName", "user.lastName", "user.email", "user.systemRole"]);
+      // get users query builder but exclude password
+      const query = this.userRepo
+        .createQueryBuilder('user')
+        .select([
+          'user.id',
+          'user.fistName',
+          'user.lastName',
+          'user.email',
+          'user.systemRole',
+        ]);
 
-        const users = await query.cache(true).getMany();
+      const users = await query.getMany();
 
-        return users;
+      return users;
     } catch (err) {
-        throw new Error("An error was encountered while fetching users");
+      throw new Error('An error was encountered while fetching users');
     }
   }
 
   async getUserById(id: string) {
     try {
-        const user = await this.userRepo.findOneBy({ id : id });
-        return user;
+      const user = await this.userRepo.findOneBy({ id: id });
+      return user;
     } catch (err) {
-        console.log(err);
-        return null;
+      console.log(err);
+      return null;
     }
-}
- 
-async getUserByEmail(email: string) {
-  try {
-    const user = await this.userRepo.findOne({
-      where: {
-        email: email,
-      },
-      relations: ["company"],
-    });
-
-    return user;
-  } catch (err) {
-    console.log(err);
-    return null;
   }
-}
 
-async remove(id: string): Promise<void> {
-  await this.userRepo.delete(id);
-}
+  async getUserByEmail(email: string) {
+    try {
+      const user = await this.userRepo.findOne({
+        where: {
+          email: email,
+        },
+      });
 
+      return user;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  }
+
+  async remove(id: string): Promise<void> {
+    await this.userRepo.delete(id);
+  }
 }

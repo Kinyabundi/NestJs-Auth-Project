@@ -15,10 +15,11 @@ export class UserController {
 
     @Public()
     @Post()
-    async createUser(@Body() createUserDto: CreateUserDto, @Res()res: Response<ApiResponseType<Partial<User>>>) {
+    async create(@Body() createUserDto: CreateUserDto, @Res()res: Response<ApiResponseType<Partial<User>>>) {
         try {
+        console.log(createUserDto);
             const newUser = await this.userService.createUser(createUserDto);
-
+            console.log(newUser);
             // remove password from response
 			const { password, ...rest } = newUser;
 
