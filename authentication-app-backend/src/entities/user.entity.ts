@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import BaseModel from './base.model.entity';
+import Task from './task.entity';
 
 export enum SystemRole {
   ADMIN = 'admin',
@@ -17,10 +18,14 @@ export default class User extends BaseModel {
   @Column({ unique: true })
   email: string;
 
-
   @Column()
   password: string;
 
   @Column({ type: 'enum', enum: SystemRole, default: SystemRole.INTEGRATOR })
   systemRole: SystemRole;
+
+  @OneToMany(() => Task, (task) => task.user,{
+    nullable: true
+  })
+  tasks: Task[];
 }
