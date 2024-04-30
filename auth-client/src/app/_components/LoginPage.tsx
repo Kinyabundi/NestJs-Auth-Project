@@ -41,12 +41,12 @@ const LoginPage = () => {
         toast.error(resp.error);
         return;
       }
-
+       console.log("This resp",resp);
       setLoading(false);
       setEmail('');
       setPassword('');
       toast.success('Logged in successfully');
-      router.push('/success');
+      router.push('/add-task');
     } catch (error) {
       toast.error('Failed to login');
     } finally {

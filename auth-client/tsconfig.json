@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
 		"target": "ES6",
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"typeRoots": ["node_modules/@types", "./src/types"],
+		"lib": ["dom", "dom.iterable", "esnext", "WebWorker"],
+		"typeRoots": ["node_modules/@types", "./src/types", "@serwist/next/typings"],
 		"allowJs": true,
 		"skipLibCheck": true,
 		"allowSyntheticDefaultImports": true,
